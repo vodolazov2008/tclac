@@ -53,7 +53,7 @@ void tclacClimate::loop()  {
 		dataRX[0] = esphome::uart::UARTDevice::read();
 		// Если принятый байт- не заголовок (0xBB), то просто покидаем цикл
 		if (dataRX[0] != 0xBB) {
-			ESP_LOGD("TCL", "Wrong byte");
+			ESP_LOGD("TCL", "Wrong int");
 			dataShow(0,0);
 			return;
 		}
@@ -74,7 +74,7 @@ void tclacClimate::loop()  {
 		// Из первых 5 байт нам нужен пятый- он содержит длину сообщения
 		esphome::uart::UARTDevice::read_array(dataRX+5, dataRX[4]+1);
 
-		byte check = getChecksum(dataRX, sizeof(dataRX));
+		int check = getChecksum(dataRX, sizeof(dataRX));
 
 		//raw = getHex(dataRX, sizeof(dataRX));
 		
@@ -561,7 +561,7 @@ void tclacClimate::takeControl() {
 }
 
 // Отправка данных в кондиционер
-void tclacClimate::sendData(byte * message, byte size) {
+void tclacClimate::sendData(int * message, int size) {
 	tclacClimate::dataShow(1,1);
 	//Serial.write(message, size);
 	this->esphome::uart::UARTDevice::write_array(message, size);
@@ -571,7 +571,7 @@ void tclacClimate::sendData(byte * message, byte size) {
 }
 
 // Преобразование байта в читабельный формат
-String tclacClimate::getHex(byte *message, byte size) {
+String tclacClimate::getHex(int *message, int size) {
 	String raw;
 	for (int i = 0; i < size; i++) {
 		raw += "\n" + String(message[i]);
@@ -581,9 +581,9 @@ String tclacClimate::getHex(byte *message, byte size) {
 }
 
 // Вычисление контрольной суммы
-byte tclacClimate::getChecksum(const byte * message, size_t size) {
-	byte position = size - 1;
-	byte crc = 0;
+int tclacClimate::getChecksum(const int * message, size_t size) {
+	int position = size - 1;
+	int crc = 0;
 	for (int i = 0; i < position; i++)
 		crc ^= message[i];
 	return crc;

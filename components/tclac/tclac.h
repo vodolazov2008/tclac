@@ -85,13 +85,13 @@ enum class AirflowHorizontalDirection : uint8_t {
 class tclacClimate : public climate::Climate, public esphome::uart::UARTDevice, public PollingComponent {
 
 	private:
-		std::byte checksum;
+		int checksum;
 		// dataTX с управлением состоит из 38 байт
-		std::byte dataTX[38];
+		int dataTX[38];
 		// А dataRX по прежнему из 61 байта
-		std::byte dataRX[61];
+		int dataRX[61];
 		// Команда запроса состояния
-		std::byte poll[8] = {0xBB,0x00,0x01,0x04,0x02,0x01,0x00,0xBD};
+		int poll[8] = {0xBB,0x00,0x01,0x04,0x02,0x01,0x00,0xBD};
 		// Инициализация и начальное наполнение переменных состоянй переключателей
 		bool beeper_status_;
 		bool display_status_;
@@ -124,11 +124,11 @@ class tclacClimate : public climate::Climate, public esphome::uart::UARTDevice, 
 		void set_force_mode_state(bool state);
 		void set_rx_led_pin(GPIOPin *rx_led_pin);
 		void set_tx_led_pin(GPIOPin *tx_led_pin);
-		void sendData(std::byte * message, std::byte size);
+		void sendData(int * message, int size);
 		void set_module_display_state(bool state);
-		static String getHex(std::byte *message, std::byte size);
+		static String getHex(int *message, int size);
 		void control(const ClimateCall &call) override;
-		static std::byte getChecksum(const std::byte * message, size_t size);
+		static int getChecksum(const int * message, size_t size);
 		void set_vertical_airflow(AirflowVerticalDirection direction);
 		void set_horizontal_airflow(AirflowHorizontalDirection direction);
 		void set_vertical_swing_direction(VerticalSwingDirection direction);
