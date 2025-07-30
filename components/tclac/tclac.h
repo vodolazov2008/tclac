@@ -124,11 +124,11 @@ class tclacClimate : public climate::Climate, public esphome::uart::UARTDevice, 
 		void set_force_mode_state(bool state);
 		void set_rx_led_pin(GPIOPin *rx_led_pin);
 		void set_tx_led_pin(GPIOPin *tx_led_pin);
-		void sendData(byte * message, byte size);
+		void sendData(std::byte * message, std::byte size);
 		void set_module_display_state(bool state);
-		static String getHex(byte *message, byte size);
+		static String getHex(std::byte *message, std::byte size);
 		void control(const ClimateCall &call) override;
-		static byte getChecksum(const byte * message, size_t size);
+		static std::byte getChecksum(const std::byte * message, size_t size);
 		void set_vertical_airflow(AirflowVerticalDirection direction);
 		void set_horizontal_airflow(AirflowHorizontalDirection direction);
 		void set_vertical_swing_direction(VerticalSwingDirection direction);
